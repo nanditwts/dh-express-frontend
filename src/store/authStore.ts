@@ -1,42 +1,33 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import { User } from '../types';
-import * as authService from '../services/auth';
+import { login as loginApi, logout as logoutApi } from '../services/auth';
 
-interface AuthState {
+interface AuthStore {
   user: User | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
-  logout: () => void;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      user: null,
-      isAuthenticated: false,
-      login: async (email: string, password: string) => {
-        try {
-          const user = await authService.login(email, password);
-          set({
-            user,
-            isAuthenticated: true,
-          });
-          return true;
-        } catch (error) {
-          return false;
-        }
-      },
-      logout: () => {
-        localStorage.removeItem('token');
-        set({
-          user: null,
-          isAuthenticated: false,
-        });
-      },
-    }),
-    {
-      name: 'auth-storage',
+export const useAuthStore = create<AuthStore>((set) => ({
+  user: null,
+  isAuthenticated: false,
+  login: async (email: string, password: string) => {
+    try {
+      const user = await loginApi(email, password);
+      set({ user, isAuthenticated: true });
+    } catch (error) {
+      console.error('Error logging in:', error);
+      throw error;
     }
-  )
-);
+  },
+  logout: async () => {
+    try {
+      await logoutApi();
+      set({ user: null, isAuthenticated: false });
+    } catch (error) {
+      console.error('Error logging out:', error);
+      throw error;
+    }
+  },
+}));
