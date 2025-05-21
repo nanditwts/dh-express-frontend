@@ -12,7 +12,7 @@ export const useAuthStore = create()(
       login: async (email, password) => {
         try {
           const { user, token } = await authService.login(email, password);
-          console.log("tokentokentoken", token);
+
           set({
             user,
             isAuthenticated: true,
