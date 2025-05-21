@@ -6,7 +6,7 @@ interface ApiResponse<T> {
   data: T;
 }
 
-export const getChannels = async () => {
+export const fetchChannels = async () => {
   const response = await api.get<any, ApiResponse<Channel[]>>('/channels');
   return response.data;
 };

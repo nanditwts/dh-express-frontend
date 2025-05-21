@@ -18,3 +18,7 @@ export const login = async (email: string, password: string) => {
   localStorage.setItem('token', response.data.token);
   return response.data.user;
 };
+
+export const logout = async () => {
+  localStorage.removeItem('token');
+};

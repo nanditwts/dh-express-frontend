@@ -6,7 +6,7 @@ interface ApiResponse<T> {
   data: T;
 }
 
-export const getAdmins = async () => {
+export const fetchAdmins = async () => {
   const response = await api.get<any, ApiResponse<Admin[]>>('/admins');
   return response.data;
 };
