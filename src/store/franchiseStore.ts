@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { Franchise } from '../types';
-import { fetchFranchises as fetchFranchisesApi } from '../services/franchise';
+import { getFranchises as fetchFranchisesApi } from '../services/franchise';
 
 interface FranchiseStore {
   franchises: Franchise[];
